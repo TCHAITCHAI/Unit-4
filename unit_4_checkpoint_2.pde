@@ -20,7 +20,7 @@ void face(int x, int y) {
   skin();
   hair();
   eye(100,200);
-  //eye();
+  eye(300,200);
   //mouth();
   
   popMatrix();
