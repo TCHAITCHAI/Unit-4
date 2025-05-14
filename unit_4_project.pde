@@ -7,38 +7,70 @@ color yellow = #FBC02D;
 color purple = #7B1FA2;
 color orange = #F57C00;
 
+color darkBrown = #3E2723;
+color tan = #FFCC99;
+color wheat = #F5DEB3;
+
+color black = #000000;
+color brown = #4E342E;
+color lightBrown = #A1887F;
+color blonde = #FFC107;
+
+color darkBlue = #1565C0;
+color darkGreen = #2E7D32;
+color deepBrown = #5D4037;
+
+color pink = #880E4F;
+color gray = #969696;
+
 void setup() {
   size(1500, 900);
   background(0);
   fill(court);
   rect(0, 480, width, height - 480);
   drawCourtLines();
+  
+int totalSeats = 15 * 4; 
+int seatsPlaced = 0;
 
-  int cols = 15;
-  int rows = 6;
+while (seatsPlaced < totalSeats) {
+  int row = seatsPlaced / 15;
+  int col = seatsPlaced % 15;
+
   float left = 50;
   float top = 30;
   float max = 480;
+  float seatW = (width - 2 * left) / 14.0;
+  float seatH = (max - top) / 4.0;
 
-  float seatW = (width - 2 * left) / (cols - 1);
-  float seatH = (max - top) / (rows - 1);
+  float x = left + col * seatW;
+  float y = top + row * seatH;
+  float s = random(0.9, 1.1);
 
-  // Draw audience
-  for (int r = 0; r < rows - 1; r++) {
-    float y = top + r * seatH;
-    for (int c = 0; c < cols; c++) {
-      float x = left + c * seatW;
-      float s = random(0.9, 1.1);
-      audience(x, y, s);
-    }
-  }
+  audience(x, y, s);
+  seatsPlaced++;
+}
 
-  // Draw players just once
+
+  int playersPlaced = 0;
   int totalPlayers = 10;
-  for (int i = 0; i < totalPlayers; i++) {
-    float px = random(100, width - 100);
-    float py = random(500, 880);
-    player(px, py);
+
+  while (playersPlaced < totalPlayers) {
+  float px = random(100, width - 100);
+  float py = random(500, 880);
+  player(px, py);
+  playersPlaced++;
+}
+
+  
+   int refsPlaced = 0;
+  int totalRefs = 2;
+
+  while (refsPlaced < totalRefs) {
+    float rx = random(100, width - 100);
+    float ry = random(500, 880);
+    ref(rx, ry);
+    refsPlaced++;
   }
 }
 
@@ -175,22 +207,49 @@ void player(float x, float y) {
   popMatrix();
 }
 
+void ref(float x, float y) {
+  pushMatrix();
+  translate(x, y);
+  float s = random(1.0, 1.2);
+  scale(s);
 
+  color[] skinTones = {darkBrown, #FFCC99, #F5DEB3 };
+  color skin = skinTones[int(random(skinTones.length))];
 
-
-
-
-// mouse cords
-void draw() {
-  textSize(18);
-
-  // Draw a white rectangle to cover old text
+  // Head
   noStroke();
-  fill(255);
-  rect(width - 120, 0, 120, 30);
+  fill(skin);
+  ellipse(0, 0, 40, 45);
 
-  // Draw updated coordinates on top
-  fill(0);
-  textAlign(RIGHT, TOP);
-  text("X: " + mouseX + "  Y: " + mouseY, width - 10, 10);
+  // Shirt 
+  fill(255);
+  rectMode(CENTER);
+  rect(0, 40, 30, 35);
+
+  // while loop for stripes
+  int stripeX = -13;
+  while (stripeX < 15) {
+    stroke(0);
+    strokeWeight(2);
+    line(stripeX, 22, stripeX, 58);
+    stripeX += 6;
+  }
+
+  // Arms
+  stroke(0);
+  strokeWeight(3);
+  line(-12, 30, -25, 50);
+  line(12, 30, 25, 50);
+
+  // Legs
+  line(-7, 55, -7, 75);
+  line(7, 55, 7, 75);
+
+  // Whistle
+  fill(150);
+  noStroke();
+  ellipse(0, 15, 6, 6);
+  rect(-3, 14, 6, 3);
+
+  popMatrix();
 }
