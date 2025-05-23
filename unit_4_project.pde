@@ -63,14 +63,14 @@ while (seatsPlaced < totalSeats) {
 }
 
   
-   int refsPlaced = 0;
+  int refs = 0;
   int totalRefs = 2;
 
-  while (refsPlaced < totalRefs) {
+  while (refs < totalRefs) {
     float rx = random(100, width - 100);
     float ry = random(500, 880);
     ref(rx, ry);
-    refsPlaced++;
+    refs++;
   }
 }
 
@@ -101,67 +101,79 @@ void audience(float x, float y, float s) {
   pushMatrix();
   translate(x, y);
   scale(s);
-  body(); 
+
+  color[] skinTones = { darkBrown, tan, wheat };
+  color skin = skinTones[int(random(skinTones.length))];
+
+  color[] hairColors = { black, brown, lightBrown, blonde, white };
+  color hair = hairColors[int(random(hairColors.length))];
+
+  color[] eyeColors = { darkBrown, darkBlue, darkGreen, deepBrown };
+  color eye = eyeColors[int(random(eyeColors.length))];
+
+  color[] shirtColors = { red, blue, green, yellow, purple, orange };
+  color shirt = shirtColors[int(random(shirtColors.length))];
+
+  drawHead(skin);
+  drawHair(hair);
+  drawEyes(eye);
+  drawNose(skin);
+  drawMouth();
+  drawTorso(shirt);
+  drawArms(shirt);
+
   popMatrix();
 }
 
-void body() {
-  color[] skinTones = { #3E2723, #FFCC99, #F5DEB3 };
-  color skin = skinTones[int(random(skinTones.length))];
-
-  color[] hairColors = { #000000, #4E342E, #A1887F, #FFC107, #FFFFFF };
-  color hair = hairColors[int(random(hairColors.length))];
-
-  color[] eyeColors = { #3E2723, #1565C0, #2E7D32, #5D4037 };
-  color eye = eyeColors[int(random(eyeColors.length))];
-
-  color[] shirtColors = {
-    red, blue, green, yellow, purple, orange 
-  };
-  color shirt = shirtColors[int(random(shirtColors.length))];
-
+void drawHead(color skin) {
   noStroke();
-  // Head
   fill(skin);
   ellipse(0, 0, 50, 60);
+}
 
-  // Hair
+void drawHair(color hair) {
   fill(hair);
   arc(0, -10, 60, 50, PI, TWO_PI);
+}
 
-  // Eyes
+void drawEyes(color eye) {
   fill(255);
   ellipse(-12, -5, 12, 8);
-  ellipse( 12, -5, 12, 8);
+  ellipse(12, -5, 12, 8);
   fill(eye);
   ellipse(-12, -5, 6, 6);
-  ellipse( 12, -5, 6, 6);
+  ellipse(12, -5, 6, 6);
   fill(0);
   ellipse(-12, -5, 3, 3);
-  ellipse( 12, -5, 3, 3);
+  ellipse(12, -5, 3, 3);
+}
 
-  // Nose
+void drawNose(color skin) {
   stroke(skin);
   strokeWeight(2);
   fill(skin);
   triangle(0, -2, -4, 10, 4, 10);
+}
 
-  // Mouth
+void drawMouth() {
   noFill();
-  stroke(#880E4F);
+  stroke(pink);
   strokeWeight(2);
   arc(0, 18, 20, 10, 0, PI);
+}
 
-  // body
+void drawTorso(color shirt) {
   noStroke();
   fill(shirt);
   rectMode(CENTER);
-  rect(0, 50, 30, 40, 5);        
+  rect(0, 50, 30, 40, 5);
+}
+
+void drawArms(color shirt) {
   stroke(shirt);
   strokeWeight(4);
-  line(-15, 40, -30, 60);        
-  line(15, 40, 30, 60);        
-  rectMode(CORNER);
+  line(-15, 40, -30, 60);
+  line(15, 40, 30, 60);
 }
 
 void player(float x, float y) {
@@ -170,42 +182,57 @@ void player(float x, float y) {
   float s = random(0.9, 1.2); 
   scale(s);
 
+  // Randomize appearance
   color[] jerseyColors = { #D50000, #2962FF, #00C853, #FFD600, #6A1B9A, #FF6D00 };
-  color[] skinTones = { #3E2723, #FFCC99, #F5DEB3 };
+  color[] skinTones = { darkBrown, tan, wheat };
 
   color jersey = jerseyColors[int(random(jerseyColors.length))];
   color skin = skinTones[int(random(skinTones.length))];
+  int number = int(random(0, 100));  // Jersey number
 
-  noStroke();
-
-  // Head
-  fill(skin);
-  ellipse(0, 0, 40, 45);
-
-  // Body
-  fill(jersey);
-  rectMode(CENTER);
-  rect(0, 40, 25, 35, 5);
-
-  // arms
-  stroke(jersey);
-  strokeWeight(3);
-  line(-12, 30, -25, 50);  
-  line(12, 30, 25, 50);   
-
-  // legs
-  line(-7, 55, -7, 75);  
-  line(7, 55, 7, 75);      
-  
-  // Jersey number
-  fill(0);  
-  textAlign(CENTER, CENTER);
-  textSize(14);
-  int number = int(random(0, 100));  // random number 
-  text(str(number), 0, 40); 
+  // Draw directly
+  drawPlayerHead(skin);
+  drawPlayerBody(jersey);
+  drawPlayerArms(jersey);
+  drawPlayerLegs(jersey);
+  drawJerseyNumber(number);
 
   popMatrix();
 }
+
+void drawPlayerHead(color skin) {
+  noStroke();
+  fill(skin);
+  ellipse(0, 0, 40, 45);
+}
+
+void drawPlayerBody(color jersey) {
+  fill(jersey);
+  rectMode(CENTER);
+  rect(0, 40, 25, 35, 5);
+}
+
+void drawPlayerArms(color jersey) {
+  stroke(jersey);
+  strokeWeight(3);
+  line(-12, 30, -25, 50);  
+  line(12, 30, 25, 50);  
+}
+
+void drawPlayerLegs(color jersey) {
+  stroke(jersey);
+  strokeWeight(3);
+  line(-7, 55, -7, 75);  
+  line(7, 55, 7, 75);  
+}
+
+void drawJerseyNumber(int number) {
+  fill(0);
+  textAlign(CENTER, CENTER);
+  textSize(14);
+  text(str(number), 0, 40);
+}
+
 
 void ref(float x, float y) {
   pushMatrix();
@@ -213,43 +240,58 @@ void ref(float x, float y) {
   float s = random(1.0, 1.2);
   scale(s);
 
-  color[] skinTones = {darkBrown, #FFCC99, #F5DEB3 };
+  color[] skinTones = { darkBrown, tan, wheat };
   color skin = skinTones[int(random(skinTones.length))];
 
-  // Head
+  drawRefHead(skin);
+  drawRefShirt();
+  drawRefStripes();
+  drawRefArms();
+  drawRefLegs();
+  drawWhistle();
+
+  popMatrix();
+}
+
+void drawRefHead(color skin) {
   noStroke();
   fill(skin);
   ellipse(0, 0, 40, 45);
+}
 
-  // Shirt 
-  fill(255);
+void drawRefShirt() {
+  fill(white);
   rectMode(CENTER);
   rect(0, 40, 30, 35);
+}
 
-  // while loop for stripes
+void drawRefStripes() {
   int stripeX = -13;
   while (stripeX < 15) {
-    stroke(0);
+    stroke(black);
     strokeWeight(2);
     line(stripeX, 22, stripeX, 58);
     stripeX += 6;
   }
+}
 
-  // Arms
-  stroke(0);
+void drawRefArms() {
+  stroke(black);
   strokeWeight(3);
   line(-12, 30, -25, 50);
   line(12, 30, 25, 50);
+}
 
-  // Legs
+void drawRefLegs() {
+  stroke(black);
+  strokeWeight(3);
   line(-7, 55, -7, 75);
   line(7, 55, 7, 75);
+}
 
-  // Whistle
+void drawWhistle() {
   fill(150);
   noStroke();
   ellipse(0, 15, 6, 6);
   rect(-3, 14, 6, 3);
-
-  popMatrix();
 }
